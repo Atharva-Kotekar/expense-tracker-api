@@ -1,0 +1,4 @@
+node_modules/
+data/expenses.json
+.env
+.DS_Store
