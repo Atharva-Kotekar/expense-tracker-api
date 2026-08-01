@@ -92,7 +92,7 @@ I also used the Jest/Supertest suite to validate:
 - Health and Swagger endpoints
 - Category rename synchronization
 
-The final local suite contains 31 passing tests. The exact command documented for the project is:
+The final local suite contains 32 passing tests. The exact command documented for the project is:
 
 ```bash
 npm test
@@ -109,6 +109,7 @@ I changed several AI suggestions after testing and review:
 - Updated validation messages so the documented ISO date format is also mentioned in errors.
 - Updated linked expense category names when a category is renamed.
 - Corrected Swagger and README content to describe both the original API contract and optional extensions accurately.
+- Added a dedicated `GET /api/expenses/category/:category` endpoint while keeping the original query-filter form.
 
 Additional corrections included:
 
@@ -132,4 +133,3 @@ The project still uses synchronous local JSON storage. That is appropriate for t
 - **Authentication, rate limiting, and deployment infrastructure:** useful in production, but outside the assignment requirements.
 - **`updated_at` timestamps:** only `created_at` was added because update timestamps were not required.
 - **Nested category objects in expense responses:** I kept the assignment-compatible `category` string as the primary response field.
-

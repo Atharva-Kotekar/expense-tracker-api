@@ -161,6 +161,29 @@ router.get('/', (req, res) => {
 
 /**
  * @swagger
+ * /api/expenses/category/{category}:
+ *   get:
+ *     summary: Get expenses by category
+ *     parameters:
+ *       - in: path
+ *         name: category
+ *         required: true
+ *         schema: { type: string }
+ *         description: Category name, for example food
+ *     responses:
+ *       200: { description: Expenses in the requested category }
+ */
+router.get('/category/:category', (req, res) => {
+  const category = req.params.category.toLowerCase();
+  const expenses = readExpenses().filter((expense) => (
+    expense.category?.toLowerCase() === category
+  ));
+
+  res.json(expenses);
+});
+
+/**
+ * @swagger
  * /api/expenses/totals:
  *   get:
  *     summary: Calculate expense totals

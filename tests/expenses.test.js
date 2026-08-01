@@ -195,6 +195,18 @@ describe('Expense API', () => {
       expect(response.statusCode).toBe(200);
       expect(response.body).toHaveLength(1);
     });
+
+    test('should list expenses through the category path endpoint', async () => {
+      await request(app).post('/api/expenses').send({
+        title: 'Legacy Lunch', amount: 500, category: 'food', date: '2026-08-01',
+      });
+
+      const response = await request(app).get('/api/expenses/category/food');
+
+      expect(response.statusCode).toBe(200);
+      expect(response.body).toHaveLength(1);
+      expect(response.body[0].category).toBe('food');
+    });
   });
 
   describe('GET /health', () => {

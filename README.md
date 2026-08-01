@@ -102,6 +102,12 @@ GET /api/expenses
 GET /api/expenses?category=food
 ```
 
+You can also use the dedicated category endpoint:
+
+```http
+GET /api/expenses/category/food
+```
+
 ### Calculate totals
 
 ```http
@@ -237,7 +243,7 @@ expense-tracker-api/
 
 ## Testing
 
-The Jest suite contains 31 tests covering the core API, categories, CRUD operations, filtering, date and amount validation, error handling, Swagger, category rename synchronization, and the original assignment payload format. Tests use an isolated JSON file and do not modify production data.
+The Jest suite contains 32 tests covering the core API, categories, CRUD operations, filtering, date and amount validation, error handling, Swagger, category rename synchronization, the dedicated category endpoint, and the original assignment payload format. Tests use an isolated JSON file and do not modify production data.
 
 ```bash
 npm test
