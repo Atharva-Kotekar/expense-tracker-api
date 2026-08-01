@@ -49,6 +49,11 @@ function resolveCategory(categoryName, categoryId) {
  *               category: { type: string, example: food }
  *               category_id: { type: string, description: Optional category identifier }
  *               date: { type: string, example: '01-08-2026' }
+ *           example:
+ *             title: Lunch
+ *             amount: 500
+ *             category: food
+ *             date: '2026-08-01'
  *     responses:
  *       201: { description: Expense created successfully }
  *       400: { description: Invalid input }
@@ -201,6 +206,11 @@ res.json({ totalOverall: total, byCategory });
  *               category: { type: string, example: food }
  *               category_id: { type: string, description: Optional category identifier }
  *               date: { type: string, example: '02/08/2026' }
+ *           example:
+ *             title: Dinner
+ *             amount: 800
+ *             category: food
+ *             date: '2026-08-01'
  *     responses:
  *       200: { description: Expense updated successfully }
  *       400: { description: Invalid input }
