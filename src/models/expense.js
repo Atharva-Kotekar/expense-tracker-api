@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const DATA_FILE = path.join(__dirname, '../data/expenses.json');
+const DATA_FILE = process.env.EXPENSE_DATA_FILE || path.join(__dirname, '../data/expenses.json');
 
 function ensureDataFile() {
   const dir = path.dirname(DATA_FILE);
