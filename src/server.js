@@ -1,6 +1,8 @@
 const express = require('express');
 const cors = require('cors');
 const expensesRouter = require('./routes/expenses');
+const categoriesRouter = require('./routes/categories');
+const { swaggerUi, specs } = require('./swagger');
 
 const app = express();
 const PORT = 3000;
@@ -8,7 +10,22 @@ const PORT = 3000;
 app.use(cors());
 app.use(express.json());
 
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
+
+/**
+ * @swagger
+ * /health:
+ *   get:
+ *     summary: Check API health
+ *     responses:
+ *       200: { description: API is healthy }
+ */
+app.get('/health', (req, res) => {
+  res.status(200).json({ status: 'ok' });
+});
+
 app.use('/api/expenses', expensesRouter);
+app.use('/api/categories', categoriesRouter);
 
 app.use((err, req, res, next) => {
   console.error(err.stack);
