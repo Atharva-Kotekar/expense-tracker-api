@@ -21,6 +21,20 @@ function generateExpenseId() {
 }
 
 function normalizeDate(date) {
+  const isoMatch = /^(\d{4})-(\d{2})-(\d{2})$/.exec(date);
+  if (isoMatch) {
+    const [, year, month, day] = isoMatch;
+    const parsedDate = new Date(Date.UTC(Number(year), Number(month) - 1, Number(day)));
+    if (
+      parsedDate.getUTCFullYear() === Number(year) &&
+      parsedDate.getUTCMonth() === Number(month) - 1 &&
+      parsedDate.getUTCDate() === Number(day)
+    ) {
+      return date;
+    }
+    return null;
+  }
+
   const match = /^(\d{2})([-/])(\d{2})\2(\d{4})$/.exec(date);
 
   if (!match) {
@@ -41,8 +55,19 @@ function normalizeDate(date) {
   return `${day}-${month}-${year}`;
 }
 
+function dateToComparable(date) {
+  const isoMatch = /^(\d{4})-(\d{2})-(\d{2})$/.exec(date);
+  if (isoMatch) return `${isoMatch[1]}${isoMatch[2]}${isoMatch[3]}`;
+
+  const normalized = normalizeDate(date);
+  if (!normalized) return null;
+
+  const [day, month, year] = normalized.split('-');
+  return `${year}${month}${day}`;
+}
+
 function validateExpense(expense) {
-  const required = ['title', 'amount', 'category_id', 'date'];
+  const required = ['title', 'amount', 'date'];
 
   for (const field of required) {
     if (expense[field] === undefined || expense[field] === null || expense[field] === '') {
@@ -54,8 +79,25 @@ function validateExpense(expense) {
     return { valid: false, error: 'Amount must be a positive number' };
   }
 
+  if (Math.round(expense.amount * 100) !== expense.amount * 100) {
+    return { valid: false, error: 'Amount must have at most two decimal places' };
+  }
+
+  if (typeof expense.title !== 'string' || !expense.title.trim()) {
+    return { valid: false, error: 'Title cannot be empty' };
+  }
+
+  if ((!expense.category_id || typeof expense.category_id !== 'string') &&
+      (!expense.category || typeof expense.category !== 'string' || !expense.category.trim())) {
+    return { valid: false, error: 'Missing field: category' };
+  }
+
+  if (expense.title.trim().length > 100) {
+    return { valid: false, error: 'Title must be 100 characters or fewer' };
+  }
+
   if (!normalizeDate(expense.date)) {
-    return { valid: false, error: 'Date must use DD-MM-YYYY or DD/MM/YYYY format' };
+    return { valid: false, error: 'Date must use YYYY-MM-DD, DD-MM-YYYY, or DD/MM/YYYY format' };
   }
 
   return { valid: true };
@@ -105,12 +147,17 @@ function validateCategory(category) {
     return { valid: false, error: 'Category name is required' };
   }
 
+  if (category.name.trim().length > 50) {
+    return { valid: false, error: 'Category name must be 50 characters or fewer' };
+  }
+
   return { valid: true };
 }
 
 module.exports = {
   generateExpenseId,
   normalizeDate,
+  dateToComparable,
   validateExpense,
   readExpenses,
   writeExpenses,

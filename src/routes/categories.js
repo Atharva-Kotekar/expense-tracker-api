@@ -5,6 +5,7 @@ const {
   readCategories,
   writeCategories,
   readExpenses,
+  writeExpenses,
   validateCategory,
 } = require('../models/expense');
 
@@ -92,6 +93,14 @@ router.put('/:id', (req, res) => {
 
   categories[index] = { ...categories[index], name };
   writeCategories(categories);
+
+  const updatedExpenses = readExpenses().map((expense) => (
+    expense.category_id === req.params.id
+      ? { ...expense, category: name }
+      : expense
+  ));
+  writeExpenses(updatedExpenses);
+
   res.json(categories[index]);
 });
 
